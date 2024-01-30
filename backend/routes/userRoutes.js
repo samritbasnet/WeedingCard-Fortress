@@ -1,0 +1,3 @@
+const authUser=(req,res)=>{
+    
+}

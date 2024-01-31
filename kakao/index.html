@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Generator</title>
+
+    <style>
+        .container {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            margin-top: 10px;
+            text-align: left;
+        }
+        label {
+            position: relative;
+            
+        }
+        textarea {
+            margin-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            max-height: 100%; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Generator</h1>
+    <div class="container">
+    <form action="/generateImage" method="post">
+        <label for="prompt">Prompt:</label>
+        <!-- <input type="text" id="prompt" name="prompt" placeholder="Enter your prompt" required> -->
+        <textarea name="prompt" id="prompt" cols="30" rows="10" placeholder="Enter your prompt" required></textarea><br>
+
+        <button type="submit">Generate Image</button>
+    </form>
+
+    <div class="image-container" id="imageContainer"></div>
+    <button id="downloadButton" style="display: none;">Download Image</button>
+</div>
+<script>
+    // JavaScript 부분을 업데이트합니다
+    document.querySelector('form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const prompt = document.getElementById('prompt').value;
+        
+        // Using Fetch API to make a POST request
+        const response = await fetch('/generateImage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt }),
+        });
+
+        // Parsing response JSON
+        const data = await response.json();
+
+        // Displaying the image
+        const imageContainer = document.getElementById('imageContainer');
+        imageContainer.innerHTML = `<img src="${data.imageUrl}" alt="Generated Image">`;
+
+        // Show download button
+        const downloadButton = document.getElementById('downloadButton');
+        downloadButton.style.display = 'block';
+        // Set download link
+        downloadButton.onclick = function () {
+            const link = document.createElement('a');
+            link.href = data.imageUrl;
+            link.download = 'generated_image.jpg'; // 파일 이름 지정
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    });
+</script>
+</body>
+</html>

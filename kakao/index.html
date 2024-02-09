@@ -25,10 +25,7 @@
         .image-container {
             text-align: center;
         }
-        img {
-            max-width: 100%;
-            max-height: 100%; /* Adjust as needed */
-        }
+       
     </style>
 </head>
 <body>
@@ -39,47 +36,134 @@
         <!-- <input type="text" id="prompt" name="prompt" placeholder="Enter your prompt" required> -->
         <textarea name="prompt" id="prompt" cols="30" rows="10" placeholder="Enter your prompt" required></textarea><br>
 
+        <label for="width">Width</label>
+        <input type="text" name="width" id="width">
+
+        <label for="height">height</label>
+        <input type="text" name="height" id="height">
+
         <button type="submit">Generate Image</button>
     </form>
 
     <div class="image-container" id="imageContainer"></div>
     <button id="downloadButton" style="display: none;">Download Image</button>
+    <div id="loadingIndicator" style="display: none;">Generating image...</div>
 </div>
 <script>
-    // JavaScript 부분을 업데이트합니다
+    // // JavaScript Updating a portion
+    // document.querySelector('form').addEventListener('submit', async function (event) {
+    //     event.preventDefault();
+    //     const prompt = document.getElementById('prompt').value;
+    //     const width = document.getElementById('width').value;
+    //     const height = document.getElementById('height').value;
+        
+    //     // Using Fetch API to make a POST request
+    //     const response = await fetch('/generateImage', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({ prompt, width, height }),
+    //     });
+
+    //     // Parsing response JSON
+    //     const data = await response.json();
+
+    //     // // Displaying the image
+    //     // const imageContainer = document.getElementById('imageContainer');
+    //     // imageContainer.innerHTML = `<img src="${data.imageUrls}" alt="Generated Image">`;
+
+
+    //     // Displaying multiple images
+    //     const imageContainer = document.getElementById('imageContainer');
+    //     imageContainer.innerHTML = ''; // Clear previous images
+
+    //     if (data.imageUrls && data.imageUrls.length > 0) {
+    //         data.imageUrls.forEach((imageUrl, index) => {
+    //             const img = document.createElement('img');
+    //             img.src = imageUrl;
+    //             img.alt = `Generated Image ${index + 1}`;
+    //             imageContainer.appendChild(img);
+    //         });
+    //     } else {
+    //         console.error('Invalid or missing imageUrls in the response:', data);
+    //     }
+
+
+
+    //     // Show download button
+    //     const downloadButton = document.getElementById('downloadButton');
+    //     downloadButton.style.display = 'block';
+    //     // Set download link
+    //     downloadButton.onclick = function () {
+    //         const link = document.createElement('a');
+    //         link.href = data.imageUrl;
+    //         link.download = 'generated_image.jpg'; // 파일 이름 지정
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         document.body.removeChild(link);
+    //     };
+    // });
+
     document.querySelector('form').addEventListener('submit', async function (event) {
         event.preventDefault();
         const prompt = document.getElementById('prompt').value;
-        
-        // Using Fetch API to make a POST request
-        const response = await fetch('/generateImage', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ prompt }),
-        });
+        const width = document.getElementById('width').value;
+        const height = document.getElementById('height').value;
 
-        // Parsing response JSON
-        const data = await response.json();
+        // Display loading indicator
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        loadingIndicator.style.display = 'block';
 
-        // Displaying the image
-        const imageContainer = document.getElementById('imageContainer');
-        imageContainer.innerHTML = `<img src="${data.imageUrl}" alt="Generated Image">`;
+        try {
+            // Using Fetch API to make a POST request
+            const response = await fetch('/generateImage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt, width, height }),
+            });
 
-        // Show download button
-        const downloadButton = document.getElementById('downloadButton');
-        downloadButton.style.display = 'block';
-        // Set download link
-        downloadButton.onclick = function () {
-            const link = document.createElement('a');
-            link.href = data.imageUrl;
-            link.download = 'generated_image.jpg'; // 파일 이름 지정
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
+            // Parsing response JSON
+            const data = await response.json();
+
+            // Displaying multiple images
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = ''; // Clear previous images
+
+            if (data.imageUrls && data.imageUrls.length > 0) {
+                data.imageUrls.forEach((imageUrl, index) => {
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = `Generated Image ${index + 1}`;
+                    imageContainer.appendChild(img);
+                });
+            } else {
+                console.error('Invalid or missing imageUrls in the response:', data);
+            }
+
+            // Show download button
+            const downloadButton = document.getElementById('downloadButton');
+            downloadButton.style.display = 'block';
+            // Set download link
+            downloadButton.onclick = function () {
+                // Download functionality for the first image (you might need to modify this based on your requirements)
+                const link = document.createElement('a');
+                link.href = data.imageUrls[0];
+                link.download = 'generated_image.jpg'; // Specify file name
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+        } catch (error) {
+            console.error('Error generating image:', error);
+        } finally {
+            // Hide loading indicator
+            loadingIndicator.style.display = 'none';
+        }
     });
+
 </script>
 </body>
 </html>

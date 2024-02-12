@@ -1,11 +1,11 @@
 import React from "react";
 import { Button, Container, TextField, Typography } from "@mui/material";
 
-const Login = () => {
+const Signup = () => {
   return (
     <div style={{ backgroundColor: "#ECEFF1", minHeight: "100vh" }}>
       <Container
-        maxWidth="sm"
+        maxWidth="md"
         sx={{
           paddingTop: "64px",
           display: "flex",
@@ -17,11 +17,11 @@ const Login = () => {
       >
         <Typography
           variant="h4"
-          component="h1"
+          component="h2"
           gutterBottom
           sx={{ color: "#37474F", fontWeight: "bold", textAlign: "center" }}
         >
-          Login
+          Sign Up
         </Typography>
         <div style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}>
           <div
@@ -35,8 +35,23 @@ const Login = () => {
           >
             <form>
               <TextField
+                id="firstName"
+                label="First Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                id="lastName"
+                label="Last Name"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+              />
+              <TextField
                 id="email"
                 label="Email Address"
+                type="email"
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -56,43 +71,14 @@ const Login = () => {
                 size="large"
                 sx={{ marginTop: "16px", borderRadius: "999px" }}
               >
-                Sign In
+                Sign Up
               </Button>
             </form>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              size="large"
-              sx={{ borderRadius: "999px" }}
-            >
-              Sign In with Facebook
-            </Button>
-            <Button
-              variant="contained"
-              color="error"
-              fullWidth
-              size="large"
-              sx={{ borderRadius: "999px" }}
-            >
-              Sign In with Google
-            </Button>
-          </div>
         </div>
-        <Typography
-          variant="body2"
-          sx={{ marginTop: "24px", color: "#455A64" }}
-        >
-          Dont have an account?{" "}
-          <a href="#" style={{ color: "#2196F3" }}>
-            Sign Up
-          </a>
-        </Typography>
       </Container>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

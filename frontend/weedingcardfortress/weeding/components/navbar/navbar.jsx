@@ -1,18 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from React Router
+import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
 const Navbar = () => {
   return (
-    <header className="bg-gray-900 text-white">
-      <div className="container mx-auto flex justify-between items-center px-4 py-2">
-        <Link to="/" className="logo text-lg font-bold">Fortress-WeedingCard</Link> {/* Use Link instead of span for navigation */}
-        <nav className="navItems flex">
-          <button className="navButton mr-4">Register</button>
-          <Link to="/login" className="navButton">Login</Link> {/* Use Link instead of button for navigation */}
-        </nav>
-      </div>
-    </header>
+    <AppBar position="fixed">
+      <Toolbar>
+        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}>
+          Fortress-WeedingCard
+        </Typography>
+        <Button color="inherit" component={Link} to="/register">Register</Button>
+        <Button color="inherit" component={Link} to="/login">Login</Button>
+      </Toolbar>
+    </AppBar>
   );
 };
-
-export default Navbar;
+export default Navbar

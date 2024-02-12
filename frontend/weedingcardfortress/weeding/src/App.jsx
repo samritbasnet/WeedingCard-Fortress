@@ -1,21 +1,19 @@
-
-import './App.css'
+import React from 'react';
+import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from "../pages/home/home"
-import List from "../pages/list/list"
+import Home from '../pages/home/home';
+import Login from '../pages/login/login';
+
+
 function App() {
-
   return (
-    <>
-     <BrowserRouter>
+    <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/image' element={<List/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login/>}/>
       </Routes>
-     </BrowserRouter>
-     </>
-    
-  )
-  }
+    </BrowserRouter>
+  );
+}
 
-export default App
+export default App;

@@ -86,7 +86,7 @@ const Login = () => {
           sx={{ marginTop: "24px", color: "#455A64" }}
         >
           Dont have an account?{" "}
-          <a href="#" style={{ color: "#2196F3" }}>
+          <a href="/" style={{ color: "#2196F3" }}>
             Sign Up
           </a>
         </Typography>

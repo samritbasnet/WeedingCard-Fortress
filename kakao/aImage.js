@@ -34,20 +34,6 @@ async function t2i(prompt, negativePrompt, imageformat, returntype, width, heigh
             }
         );
 
-        // // Convert the response to JSON format
-        // const responseData = response.data;
-
-        //  // Extract the image URL from the response
-        //  const imageUrl = responseData.images[0].image;
-        //  console.log('Image URL:', imageUrl);
-        //  console.log(responseData.images[1].image);
-    
-
-       
-        
-        // // Send the image URL to the client
-        // return imageUrl;
-
         const responesData = response.data;
 
         const imageUrls = responesData.images.map(image => image.image);
@@ -71,7 +57,7 @@ app.get('/', async (req, res) => {
 app.post('/generateImage', async (req, res) => {
     const prompt = req.body.prompt;
     const negativePrompt = 
-    "paper, cake, low quality, low contrast, draft, amateur, cut off, cropped, frame, object out of frame, out of frame, body out of frame, text, letter, signature, watermark";
+    "paper, cake, low quality, low contrast, draft, amateur, cut off, cropped, frame, object out of frame, out of frame, body out of frame, text, letter, signature, watermark, blood";
     const imageformat = "png";
     const returntype = "url";
     const imageQuality = 80;
@@ -88,16 +74,6 @@ app.post('/generateImage', async (req, res) => {
     console.log(negativePrompt);
     console.log("Samples:", samples);
 
-
-
-    // const imageUrl = await t2i(prompt, negativePrompt, imageformat, returntype, width, height, imageQuality, samples);
-
-    // if (imageUrl) {
-    //     res.json({ imageUrl }); // Sending JSON response
-    // } else {
-    //     // If image generation fails, send an error response
-    //     res.status(500).send('Error generating image');
-    // }
 
     const imageUrls = await t2i(prompt, negativePrompt, imageformat, returntype, width, height, imageQuality, samples);
 

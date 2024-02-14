@@ -1,21 +1,15 @@
-import express from 'express';
-import {
-  authUser,
-  registerUser,
-  logoutUser,
-  getUserProfile,
-  updateUserProfile,
-} from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
+const express = require('express')
+const userController = require('../controllers/userController')
+const { signup, login } = userController
+const userAuth = require('../Middlewares/userAuth')
 
-const router = express.Router();
+const router = express.Router()
 
-router.post('/', registerUser);
-router.post('/auth', authUser);
-router.post('/logout', logoutUser);
-router
-  .route('/profile')
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile);
+//signup endpoint
+//passing the middleware function to the signup
+router.post('/signup', userAuth.saveUser, signup)
 
-export default router;
+//login route
+router.post('/login', login )
+
+module.exports = router

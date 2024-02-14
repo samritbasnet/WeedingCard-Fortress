@@ -1,10 +1,30 @@
-import express from 'express';
-import dotenv from 'dotenv';
-dotenv.config();
-const port=process.env.PORT ||5000;
+//importing modules
+const express = require('express')
+const sequelize = require('sequelize')
+const dotenv = require('dotenv').config()
+const cookieParser = require('cookie-parser')
+ const db = require('./models')
+ const userRoutes = require ('./routes/userRoutes')
+ 
 
-const app=express();
+//setting up your port
+const PORT = process.env.PORT || 8080
 
-app.get('/',(req,res)=>res.send('Server is ready'));
+//assigning the variable app to express
+const app = express()
 
-app.listen(port,()=>console.log(`Server started on port ${port}`));
+//middleware
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+
+//synchronizing the database and forcing it to false so we dont lose data
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("db has been re sync")
+})
+
+//routes for the user API
+app.use('/api/users', userRoutes)
+
+//listening to server connection
+app.listen(PORT, () => console.log(`Server is connected on ${PORT}`))

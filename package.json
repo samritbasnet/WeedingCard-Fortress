@@ -2,7 +2,7 @@
   "name": "teamfortress-weedingcard",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "node backend/server.js",
@@ -20,9 +20,13 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.1",
+<<<<<<< HEAD
+    "node.js": "^0.0.1-security"
+=======
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "vite": "^5.1.1"
+>>>>>>> 2cbfab21c6a68f8d9405691057267c4e4fbc2b0e
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

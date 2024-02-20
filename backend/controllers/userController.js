@@ -1,91 +1,38 @@
-//importing modules
-const bcrypt = require("bcrypt");
-const db = require("../models");
-const jwt = require("jsonwebtoken");
+// controllers/userController.js
 
-// Assigning users to the variable User
-const User = db.users;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const pool = require('../config/db');
 
-//signing a user up
-//hashing users password before its saved to the database with bcrypt
-const signup = async (req, res) => {
- try {
-   const { userName, email, password } = req.body;
-   const data = {
-     userName,
-     email,
-     password: await bcrypt.hash(password, 10),
-   };
-   //saving the user
-   const user = await User.create(data);
 
-   //if user details is captured
-   //generate token with the user's id and the secretKey in the env file
-   // set cookie with the token generated
-   if (user) {
-     let token = jwt.sign({ id: user.id }, process.env.secretKey, {
-       expiresIn: 1 * 24 * 60 * 60 * 1000,
-     });
+const registerUser = async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
 
-     res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-     console.log("user", JSON.stringify(user, null, 2));
-     console.log(token);
-     //send users details
-     return res.status(201).send(user);
-   } else {
-     return res.status(409).send("Details are not correct");
-   }
- } catch (error) {
-   console.log(error);
- }
+  try {
+    // Check if the user already exists
+    const existingUser = await db.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert the user into the database
+    const newUser = await db.query(
+      'INSERT INTO users (first_name, last_name, email, password) VALUES ("test","test2", "test7@gmail.com", test1234) RETURNING *',
+      [firstName, lastName, email, hashedPassword]
+    );
+
+    // Generate JWT token
+    const token = jwt.sign({ userId: newUser.rows[0].id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    res.status(201).json({ token });
+  } catch (error) {
+    console.error('Error registering user:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
 
-
-//login authentication
-
-const login = async (req, res) => {
- try {
-const { email, password } = req.body;
-
-   //find a user by their email
-   const user = await User.findOne({
-     where: {
-     email: email
-   } 
-     
-   });
-
-   //if user email is found, compare password with bcrypt
-   if (user) {
-     const isSame = await bcrypt.compare(password, user.password);
-
-     //if password is the same
-      //generate token with the user's id and the secretKey in the env file
-
-     if (isSame) {
-       let token = jwt.sign({ id: user.id }, process.env.secretKey, {
-         expiresIn: 1 * 24 * 60 * 60 * 1000,
-       });
-
-       //if password matches wit the one in the database
-       //go ahead and generate a cookie for the user
-       res.cookie("jwt", token, { maxAge: 1 * 24 * 60 * 60, httpOnly: true });
-       console.log("user", JSON.stringify(user, null, 2));
-       console.log(token);
-       //send user data
-       return res.status(201).send(user);
-     } else {
-       return res.status(401).send("Authentication failed");
-     }
-   } else {
-     return res.status(401).send("Authentication failed");
-   }
- } catch (error) {
-   console.log(error);
- }
-};
-
-module.exports = {
- signup,
- login,
-};
+module.exports = { registerUser };

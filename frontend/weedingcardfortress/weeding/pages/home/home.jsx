@@ -1,23 +1,47 @@
 import React from 'react';
-import { Button, Container, Typography } from '@mui/material';
+import { Container, Typography, TextField, Button, Grid, Card, CardContent } from '@mui/material';
 
 const Home = () => {
   return (
-    <div style={{ backgroundColor: '#E1F5FE', minHeight: '100vh' }}>
-      <Container maxWidth="md" sx={{ paddingTop: '64px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-        <Typography variant="h2" component="h1" gutterBottom sx={{ color: '#0D47A1', fontWeight: 'bold', textAlign: 'center' }}>
-          Create Stunning Wedding Cards
-        </Typography>
-        <Typography variant="body1" gutterBottom sx={{ color: '#1565C0', textAlign: 'center' }}>
-          Design personalized wedding cards with ease
-        </Typography>
-        <div style={{ marginTop: '32px' }}>
-          <Button variant="contained" color="primary" size="large" sx={{ borderRadius: '999px' }}>
-            Get Started
-          </Button>
-        </div>
-      </Container>
-    </div>
+    <Container maxWidth="lg" style={{ marginTop: 50 }}>
+      <Typography variant="h4" align="center" gutterBottom>
+        AI Image Generation
+      </Typography>
+      <Typography variant="subtitle1" align="center" gutterBottom>
+        Enter your prompt to generate images:
+      </Typography>
+      <TextField
+        id="prompt"
+        label="Prompt"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        placeholder="Enter your prompt here..."
+      />
+      <Button variant="contained" color="primary" fullWidth style={{ marginTop: 10 }}>
+        Generate Images
+      </Button>
+      {/* Image Cards */}
+      <Typography variant="h6" align="center" style={{ marginTop: 30 }} gutterBottom>
+        Generated Images
+      </Typography>
+      <Grid container spacing={2} style={{ marginTop: 10 }}>
+        {/* Sample Image Cards */}
+        {[1, 2, 3, 4, 5].map((item) => (
+          <Grid item key={item} xs={12} sm={6} md={4}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Generated Image {item}
+                </Typography>
+                {/* Replace this with your image */}
+                <img src={`https://via.placeholder.com/300x200?text=Image+${item}`} alt={`Image ${item}`} style={{ width: '100%' }} />
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

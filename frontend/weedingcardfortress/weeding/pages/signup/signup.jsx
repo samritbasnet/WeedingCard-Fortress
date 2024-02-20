@@ -1,9 +1,54 @@
-import React from "react";
-import { Button, Container, TextField, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Container, TextField, Typography, Grid } from "@mui/material";
+import axios from 'axios';
 
 const Signup = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const errors = {};
+    if (!firstName.trim()) {
+      errors.firstName = 'First name is required';
+    }
+    if (!lastName.trim()) {
+      errors.lastName = 'Last name is required';
+    }
+    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+      errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
+    }
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/signup', {
+        firstName,
+        lastName,
+        email,
+        password
+      });
+      console.log(response.data); // Handle successful signup
+    } catch (error) {
+      console.error(error.response.data.message); // Handle signup error
+    }
+  };
+
   return (
-    <div style={{ backgroundColor: "#ECEFF1", minHeight: "100vh" }}>
+    <div style={{
+      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", // Define gradient colors and angle
+      minHeight: "100vh", // Ensure full height
+      display: "flex", // Use flex to center content vertically
+      alignItems: "center", // Center vertically
+      justifyContent: "center", // Center horizontally
+    }}>
       <Container
         maxWidth="md"
         sx={{
@@ -19,7 +64,7 @@ const Signup = () => {
           variant="h4"
           component="h2"
           gutterBottom
-          sx={{ color: "#37474F", fontWeight: "bold", textAlign: "center" }}
+          sx={{ color: "#fff", fontWeight: "bold", textAlign: "center" }} // Change text color to white
         >
           Sign Up
         </Typography>
@@ -33,13 +78,17 @@ const Signup = () => {
               marginBottom: "24px",
             }}
           >
-            <form>
+            <form onSubmit={handleSubmit}>
               <TextField
                 id="firstName"
                 label="First Name"
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                error={errors.firstName}
+                helperText={errors.firstName}
               />
               <TextField
                 id="lastName"
@@ -47,6 +96,10 @@ const Signup = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                error={errors.lastName}
+                helperText={errors.lastName}
               />
               <TextField
                 id="email"
@@ -55,6 +108,8 @@ const Signup = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 id="password"
@@ -63,8 +118,13 @@ const Signup = () => {
                 variant="outlined"
                 fullWidth
                 margin="normal"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={errors.password}
+                helperText={errors.password}
               />
               <Button
+                type="submit"
                 variant="contained"
                 color="primary"
                 fullWidth

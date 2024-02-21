@@ -9,6 +9,11 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
+  const validateEmail = (email) => {
+    // Basic email validation using regular expression
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -19,6 +24,9 @@ const Signup = () => {
     }
     if (!lastName.trim()) {
       errors.lastName = 'Last name is required';
+    }
+    if (!validateEmail(email)) {
+      errors.email = 'Invalid email address';
     }
     if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
       errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
@@ -50,7 +58,7 @@ const Signup = () => {
       justifyContent: "center", // Center horizontally
     }}>
       <Container
-        maxWidth="md"
+        maxWidth="sm"
         sx={{
           paddingTop: "64px",
           display: "flex",
@@ -68,74 +76,71 @@ const Signup = () => {
         >
           Sign Up
         </Typography>
-        <div style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}>
-          <div
-            style={{
-              backgroundColor: "#FFFFFF",
-              padding: "24px",
-              borderRadius: "8px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              marginBottom: "24px",
-            }}
-          >
-            <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="firstName"
                 label="First Name"
                 variant="outlined"
                 fullWidth
-                margin="normal"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                error={errors.firstName}
+                error={!!errors.firstName}
                 helperText={errors.firstName}
               />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 id="lastName"
                 label="Last Name"
                 variant="outlined"
                 fullWidth
-                margin="normal"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                error={errors.lastName}
+                error={!!errors.lastName}
                 helperText={errors.lastName}
               />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 id="email"
                 label="Email Address"
                 type="email"
                 variant="outlined"
                 fullWidth
-                margin="normal"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                error={!!errors.email}
+                helperText={errors.email}
               />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 id="password"
                 label="Password"
                 type="password"
                 variant="outlined"
                 fullWidth
-                margin="normal"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                error={errors.password}
+                error={!!errors.password}
                 helperText={errors.password}
               />
+            </Grid>
+            <Grid item xs={12}>
               <Button
                 type="submit"
                 variant="contained"
                 color="primary"
                 fullWidth
                 size="large"
-                sx={{ marginTop: "16px", borderRadius: "999px" }}
               >
                 Sign Up
               </Button>
-            </form>
-          </div>
-        </div>
+            </Grid>
+          </Grid>
+        </form>
       </Container>
     </div>
   );

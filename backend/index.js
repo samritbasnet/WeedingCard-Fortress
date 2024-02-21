@@ -14,6 +14,7 @@ const PORT = process.env.PORT || 3200;
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({extended:false}));
 
 app.get("/login", (req, res) => {
   res.render("login");

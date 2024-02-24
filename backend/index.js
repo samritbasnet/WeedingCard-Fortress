@@ -2,8 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const authRoute = require('./routes/authRoute');
-
-const pool = require("./config/db");
+require("./mongo");
+const userRoute = require("./routes/userRoute");
 
 dotenv.config();
 
@@ -46,6 +46,7 @@ app.post("/login", (req, res) => {
 
 // Routes
 app.use('/auth', authRoute);
+app.use("/users", userRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

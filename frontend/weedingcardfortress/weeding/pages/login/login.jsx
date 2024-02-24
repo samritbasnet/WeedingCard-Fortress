@@ -25,11 +25,13 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post('http://localhost:3200/users/login', {
         email,
         password
       });
       console.log(response.data); // Handle successful login
+      localStorage.setItem("token", response.data?.token);
+      window.location.href = "/home";
     } catch (error) {
       console.error(error.response.data.message); // Handle login error
     }

@@ -26,22 +26,24 @@ const Signup = () => {
     if (!validateEmail(email)) {
       errors.email = 'Invalid email address';
     }
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-      errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
-    }
+    // if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
+    //   errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
+    // }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', {
+      const response = await axios.post('http://localhost:3200/users/register', {
         firstName,
         lastName,
         email,
         password
       });
       console.log(response.data); // Handle successful signup
+      localStorage.setItem("token", response.data?.token);
+      window.location.href = "/home";
     } catch (error) {
       console.error(error.response.data.message); // Handle signup error
     }

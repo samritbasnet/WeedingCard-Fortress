@@ -38,8 +38,8 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "64px", minHeight: "100vh" }}>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ color: "#37474F", fontWeight: "bold", textAlign: "center" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "64px", minHeight: "100vh", backgroundColor: "#FFFFFF", color: "#000000" }}>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: "bold", textAlign: "center" }}>
         Welcome Back
       </Typography>
       <div style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}>
@@ -102,7 +102,7 @@ const Login = () => {
           </Button>
         </div>
       </div>
-      <Typography variant="body2" sx={{ marginTop: "24px", color: "#455A64", textAlign: "center" }}>
+      <Typography variant="body2" sx={{ marginTop: "24px", textAlign: "center" }}>
         Dont have an account?{" "}
         <a href="/register" style={{ color: "#2196F3" }}>
           Sign Up

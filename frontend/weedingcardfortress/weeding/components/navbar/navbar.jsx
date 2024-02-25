@@ -4,7 +4,7 @@ import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 
 const Navbar = () => {
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" color="primary">
       <Toolbar>
         <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}>
           Fortress-WeedingCard
@@ -16,4 +16,5 @@ const Navbar = () => {
     </AppBar>
   );
 };
-export default Navbar
+
+export default Navbar;

@@ -50,8 +50,8 @@ const Signup = () => {
   };
 
   return (
-    <Container maxWidth="sm" style={{ marginTop: "64px", backgroundColor: "#FFFFFF", padding: "32px", borderRadius: "8px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)" }}>
-      <Typography variant="h4" component="h2" gutterBottom style={{ marginBottom: "32px", color: "#000000" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "64px" }}>
+      <Typography variant="h4" component="h2" gutterBottom>
         Sign Up
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -113,7 +113,6 @@ const Signup = () => {
               color="primary"
               fullWidth
               size="large"
-              style={{ backgroundColor: "#2196F3", color: "#FFFFFF" }}
             >
               Sign Up
             </Button>

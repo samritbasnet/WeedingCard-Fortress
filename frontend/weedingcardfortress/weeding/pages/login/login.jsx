@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "64px", minHeight: "200vh" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "54px", minHeight: "90vh" }}>
       <Typography variant="h4" component="h1" gutterBottom sx={{ color: "#ffff", fontWeight: "bold", textAlign: "center" }}>
         Welcome Back
       </Typography>

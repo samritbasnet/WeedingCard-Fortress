@@ -3,20 +3,23 @@ import { Container, Typography, TextField, Button, Grid, Card, CardContent } fro
 
 const Home = () => {
   return (
-    <Container maxWidth="lg" style={{ marginTop: 50 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Container maxWidth="lg" style={{ marginTop: 50, marginBottom: 100 }}>
+      <Typography variant="h4" align="center" gutterBottom >
         AI Image Generation
       </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom>
+      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#E5BDC4' }}>
         Enter your prompt to generate images:
       </Typography>
       <TextField
+      
         id="prompt"
         label="Prompt"
         variant="outlined"
         fullWidth
         margin="normal"
-        placeholder="Enter your prompt here..."
+        placeholder ="Enter your prompt here..."
+        InputProps={{ style: { color: '#' } }} // Set text color to light
+        style={{color:'#CFE2F3'}}
       />
       <Button variant="contained" color="primary" fullWidth style={{ marginTop: 10 }}>
         Generate Images
@@ -35,7 +38,7 @@ const Home = () => {
                   Generated Image {item}
                 </Typography>
                 {/* Replace this with your image */}
-                <img src={`https://via.placeholder.com/300x200?text=Image+${item}`} alt={`Image ${item}`} style={{ width: '100%' }} />
+                <img src={`https://source.unsplash.com/1600x900/?wedding-card/300x200?text=Image+${item}`} alt={`Image ${item}`} style={{ width: '100%' }} />
               </CardContent>
             </Card>
           </Grid>

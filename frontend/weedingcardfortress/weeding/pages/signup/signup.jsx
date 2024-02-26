@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Container, TextField, Typography, Grid } from "@mui/material";
+import { Button, Container, TextField, Typography, Grid, Box } from "@mui/material";
 import axios from 'axios';
 
 const Signup = () => {
@@ -50,18 +50,24 @@ const Signup = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#ffffff", padding: "24px", borderRadius: "8px" }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Sign Up
-      </Typography>
+    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#CAC2C1", padding: "24px", borderRadius: "8px" }}>
+      <Box textAlign="center" marginBottom="24px">
+        <Typography variant="h4" component="h2" gutterBottom style={{fontWeight: 'bold'}}>
+          Create an Account
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          Fill out the form below to get started.
+        </Typography>
+      </Box>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={6}>
             <TextField
               id="firstName"
               label="First Name"
               variant="outlined"
               fullWidth
+              size="small"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               error={!!errors.firstName}
@@ -74,6 +80,7 @@ const Signup = () => {
               label="Last Name"
               variant="outlined"
               fullWidth
+              size="small"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               error={!!errors.lastName}
@@ -87,6 +94,7 @@ const Signup = () => {
               type="email"
               variant="outlined"
               fullWidth
+              size="small"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={!!errors.email}
@@ -100,6 +108,7 @@ const Signup = () => {
               type="password"
               variant="outlined"
               fullWidth
+              size="small"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               error={!!errors.password}

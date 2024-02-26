@@ -50,7 +50,7 @@ const Signup = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "64px" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#ffffff", padding: "24px", borderRadius: "8px" }}>
       <Typography variant="h4" component="h2" gutterBottom>
         Sign Up
       </Typography>

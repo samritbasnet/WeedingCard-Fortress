@@ -39,6 +39,7 @@ const Login = () => {
 
   return (
     <Container maxWidth="sm" sx={{ marginTop: "54px", minHeight: "90vh" }}>
+      <AccountCircle sx={{ fontSize: 80, color: '#2196F3', marginBottom: '24px' }} />
       <Typography variant="h4" component="h1" gutterBottom sx={{ color: "#ffff", fontWeight: "bold", textAlign: "center" }}>
         Welcome Back
       </Typography>
@@ -46,9 +47,6 @@ const Login = () => {
         <div style={{ padding: "24px", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", marginBottom: "24px", backgroundColor: "#FFFFFF" }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2} alignItems="center">
-              <Grid item>
-                <AccountCircle />
-              </Grid>
               <Grid item xs={11}>
                 <TextField
                   id="email"

@@ -3,23 +3,21 @@ import { Container, Typography, TextField, Button, Grid, Card, CardContent } fro
 
 const Home = () => {
   return (
-    <Container maxWidth="lg" style={{ marginTop: 50, marginBottom: 100 }}>
+    <Container maxWidth="lg" style={{ marginTop: 50, marginBottom: 100, backgroundColor: '#ffffff' }}>
       <Typography variant="h4" align="center" gutterBottom >
         AI Image Generation
       </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#E5BDC4' }}>
+      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#000' }}>
         Enter your prompt to generate images:
       </Typography>
       <TextField
-      
         id="prompt"
         label="Prompt"
         variant="outlined"
         fullWidth
         margin="normal"
         placeholder ="Enter your prompt here..."
-        InputProps={{ style: { color: '#' } }} // Set text color to light
-        style={{color:'#CFE2F3'}}
+        InputProps={{ style: { color: '#CFE2F3' } }} // Set text color to light
       />
       <Button variant="contained" color="primary" fullWidth style={{ marginTop: 10 }}>
         Generate Images

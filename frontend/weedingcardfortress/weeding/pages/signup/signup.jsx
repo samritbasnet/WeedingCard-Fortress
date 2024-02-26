@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Container, TextField, Typography, Grid, Box } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 import axios from 'axios';
 
 const Signup = () => {
@@ -50,9 +51,10 @@ const Signup = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#CAC2C1", padding: "24px", borderRadius: "8px" }}>
+    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#dfe3ee", padding: "24px", borderRadius: "8px" }}>
       <Box textAlign="center" marginBottom="24px">
-        <Typography variant="h4" component="h2" gutterBottom style={{fontWeight: 'bold'}}>
+        <AccountCircle sx={{ fontSize: 80, color: '#2196F3', marginBottom: '24px' }} />
+        <Typography variant="h4" component="h2" gutterBottom style={{fontWeight: 'bold', color:'#000'}}>
           Create an Account
         </Typography>
         <Typography variant="body2" color="textSecondary">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import logo from '../navbar/logo2.jpeg';
+import logo from '../navbar/logo.jpeg';
 
 const Navbar = () => {
   return (

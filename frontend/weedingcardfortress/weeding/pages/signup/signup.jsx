@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Container, TextField, Typography, Grid, Box } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -27,9 +28,6 @@ const Signup = () => {
     if (!validateEmail(email)) {
       errors.email = 'Invalid email address';
     }
-    // if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-    //   errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
-    // }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       return;
@@ -42,13 +40,21 @@ const Signup = () => {
         email,
         password
       });
-      console.log(response.data); // Handle successful signup
+    
+      toast.success("Successfully registered!");
       localStorage.setItem("token", response.data?.token);
-      window.location.href = "/home";
+      window.location.href = "/login";
     } catch (error) {
-      console.error(error.response.data.message); // Handle signup error
+      if (error.response && error.response.data && error.response.data.message) {
+        // Handle specific error messages from the server
+        toast.error(`Registration failed: ${error.response.data.message}`);
+      } else {
+        // Handle generic error messages
+        toast.error("Registration failed. Please try again later.");
+      }
+      console.error("Error registering user:", error.message);
     }
-  };
+  }
 
   return (
     <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#dfe3ee", padding: "24px", borderRadius: "8px" }}>

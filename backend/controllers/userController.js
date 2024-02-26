@@ -35,7 +35,7 @@ const registerUser = async (req, res) => {
     });
 
     // Generate JWT token
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET || 'fallbackSecret', { expiresIn: '1h' });
 
     res.status(201).json({ token });
   } catch (error) {
@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
       const isValid = bcrypt.compareSync(password, hashedPassword);
 
       if(isValid){
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || 'fallbackSecret', { expiresIn: '1h' });
 
         res.send({
           token,

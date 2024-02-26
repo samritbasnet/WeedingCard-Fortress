@@ -33,16 +33,6 @@ app.post("/login", (req, res) => {
   const insertSTMT = `INSERT INTO accounts(email, password) VALUES (?, ?)`;
   const values = [email, password];
 
-  pool.query(insertSTMT, values, (error, response) => {
-    if (error) {
-      console.error("Error occurred while executing SQL query:", error);
-      res.status(500).send("Error occurred while processing your request.");
-    } else {
-      console.log("Data saved:", response);
-      res.send("Data saved successfully.");
-    }
-  });
-});
 
 // Routes
 app.use('/auth', authRoute);
@@ -51,3 +41,4 @@ app.use("/users", userRoute);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+})

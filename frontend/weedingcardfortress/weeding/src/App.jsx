@@ -9,7 +9,6 @@ import Signup from '../pages/signup/signup';
 import Home from '../pages/home/home';
 import Footer from '../components/footer/footer';
 
-
 function App() {
   return (
     <BrowserRouter>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Container, Typography, TextField, Button, Grid, Card, CardContent } from '@mui/material';
+import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Home = () => {
   return (
@@ -16,10 +17,17 @@ const Home = () => {
         variant="outlined"
         fullWidth
         margin="normal"
-        placeholder ="Enter your prompt here..."
-        InputProps={{ style: { color: '#CFE2F3' } }} // Set text color to light
+        placeholder="Enter your prompt here..."
+        InputProps={{
+          style: { color: '#29272D' }, // Set text color to light
+          startAdornment: (
+            <IconButton>
+              <SearchIcon />
+            </IconButton>
+          )
+        }}
       />
-      <Button variant="contained" color="primary" fullWidth style={{ marginTop: 10 }}>
+      <Button variant="contained" color="secondary" size="small" style={{ marginTop: 10, width: '150px', backgroundColor: '#87AEDC', color: '#ffffff' }}>
         Generate Images
       </Button>
       {/* Image Cards */}
@@ -28,15 +36,15 @@ const Home = () => {
       </Typography>
       <Grid container spacing={2} style={{ marginTop: 10 }}>
         {/* Sample Image Cards */}
-        {[1, 2, 3, 4, 5].map((item) => (
+        {[1, 2, 3, 4, 5 ,6].map((item) => (
           <Grid item key={item} xs={12} sm={6} md={4}>
-            <Card>
+            <Card style={{ transition: 'transform 0.3s ease', '&:hover': { transform: 'scale(1.05)' }, height: '300px' }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   Generated Image {item}
                 </Typography>
                 {/* Replace this with your image */}
-                <img src={`https://source.unsplash.com/1600x900/?wedding-card/300x200?text=Image+${item}`} alt={`Image ${item}`} style={{ width: '100%' }} />
+                <img src={`https://source.unsplash.com/1600x900/?wedding-card/300x200?text=Image+${item}`} alt={`Image ${item}`} style={{ width: '100%', borderRadius: 8 }} />
               </CardContent>
             </Card>
           </Grid>

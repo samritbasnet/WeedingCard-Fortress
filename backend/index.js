@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
@@ -8,6 +7,11 @@ const userController = require('./controllers/userController');
 const UserModel = require('./models/User');
 
 const pool=require("./config/db")
+
+require("./mongo");
+const userRoute = require("./routes/userRoute");
+const userController = require('./controllers/userController');
+
 
 
 
@@ -78,24 +82,23 @@ app.post("/login",async (req,res)=>{
     console.log("email:" + email);
     console.log("password:" + password);
 
-    // MongoDB에서 해당 이메일로 사용자 찾기
+  
     const user = await UserModel.findOne({ email });
 
-    // 사용자가 없으면 에러 반환
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // 비밀번호 비교
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    // 비밀번호가 일치하지 않으면 에러 반환
+
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    // 로그인 성공 시 필요한 로직을 추가 (예: 토큰 생성 등)
-    // 여기에서는 간단하게 성공 메시지만 반환
+
     res.status(200).json({ message: 'Login successful' });
     console.log('Login successful');
   } catch (error) {
@@ -106,10 +109,19 @@ app.post("/login",async (req,res)=>{
 
 
 
+app.use(express.urlencoded({ extended: false }));
+
 
 // Routes
 app.use('/auth', authRoute);
+app.use("/users", userRoute);
+
+// Register route handler
+app.post("/register", userController.registerUser);
+
+// Login route handler
+app.post("/login", userController.loginUser);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`); 
+  console.log(`Server is running on port ${PORT}`);
 });

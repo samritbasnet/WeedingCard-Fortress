@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button, Container, TextField, Typography, Grid } from "@mui/material";
+import { Button, Container, TextField, Typography, Grid, Box } from "@mui/material";
+import { AccountCircle } from "@mui/icons-material";
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,10 +11,13 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
 
+  const validateEmail = (email) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
     const errors = {};
     if (!firstName.trim()) {
       errors.firstName = 'First name is required';
@@ -20,8 +25,8 @@ const Signup = () => {
     if (!lastName.trim()) {
       errors.lastName = 'Last name is required';
     }
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(password)) {
-      errors.password = 'Password must be at least 8 characters long and contain at least one letter and one number';
+    if (!validateEmail(email)) {
+      errors.email = 'Invalid email address';
     }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
@@ -29,115 +34,109 @@ const Signup = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/register', {
+      const response = await axios.post('http://localhost:3200/users/register', {
         firstName,
         lastName,
         email,
         password
       });
-      console.log(response.data); // Handle successful signup
+    
+      toast.success("Successfully registered!");
+      localStorage.setItem("token", response.data?.token);
+      window.location.href = "/login";
     } catch (error) {
-      console.error(error.response.data.message); // Handle signup error
+      if (error.response && error.response.data && error.response.data.message) {
+        // Handle specific error messages from the server
+        toast.error(`Registration failed: ${error.response.data.message}`);
+      } else {
+        // Handle generic error messages
+        toast.error("Registration failed. Please try again later.");
+      }
+      console.error("Error registering user:", error.message);
     }
-  };
+  }
 
   return (
-    <div style={{
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)", // Define gradient colors and angle
-      minHeight: "100vh", // Ensure full height
-      display: "flex", // Use flex to center content vertically
-      alignItems: "center", // Center vertically
-      justifyContent: "center", // Center horizontally
-    }}>
-      <Container
-        maxWidth="md"
-        sx={{
-          paddingTop: "64px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "100vh",
-        }}
-      >
-        <Typography
-          variant="h4"
-          component="h2"
-          gutterBottom
-          sx={{ color: "#fff", fontWeight: "bold", textAlign: "center" }} // Change text color to white
-        >
-          Sign Up
+    <Container maxWidth="sm" sx={{ marginTop: "64px", backgroundColor: "#dfe3ee", padding: "24px", borderRadius: "8px" }}>
+      <Box textAlign="center" marginBottom="24px">
+        <AccountCircle sx={{ fontSize: 80, color: '#2196F3', marginBottom: '24px' }} />
+        <Typography variant="h4" component="h2" gutterBottom style={{fontWeight: 'bold', color:'#000'}}>
+          Create an Account
         </Typography>
-        <div style={{ width: "100%", maxWidth: "400px", margin: "0 auto" }}>
-          <div
-            style={{
-              backgroundColor: "#FFFFFF",
-              padding: "24px",
-              borderRadius: "8px",
-              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-              marginBottom: "24px",
-            }}
-          >
-            <form onSubmit={handleSubmit}>
-              <TextField
-                id="firstName"
-                label="First Name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                error={errors.firstName}
-                helperText={errors.firstName}
-              />
-              <TextField
-                id="lastName"
-                label="Last Name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                error={errors.lastName}
-                helperText={errors.lastName}
-              />
-              <TextField
-                id="email"
-                label="Email Address"
-                type="email"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <TextField
-                id="password"
-                label="Password"
-                type="password"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={errors.password}
-                helperText={errors.password}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                size="large"
-                sx={{ marginTop: "16px", borderRadius: "999px" }}
-              >
-                Sign Up
-              </Button>
-            </form>
-          </div>
-        </div>
-      </Container>
-    </div>
+        <Typography variant="body2" color="textSecondary">
+          Fill out the form below to get started.
+        </Typography>
+      </Box>
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="firstName"
+              label="First Name"
+              variant="outlined"
+              fullWidth
+              size="small"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              error={!!errors.firstName}
+              helperText={errors.firstName}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="lastName"
+              label="Last Name"
+              variant="outlined"
+              fullWidth
+              size="small"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              error={!!errors.lastName}
+              helperText={errors.lastName}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="email"
+              label="Email Address"
+              type="email"
+              variant="outlined"
+              fullWidth
+              size="small"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={!!errors.email}
+              helperText={errors.email}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id="password"
+              label="Password"
+              type="password"
+              variant="outlined"
+              fullWidth
+              size="small"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={!!errors.password}
+              helperText={errors.password}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              size="large"
+            >
+              Sign Up
+            </Button>
+          </Grid>
+        </Grid>
+      </form>
+    </Container>
   );
 };
 

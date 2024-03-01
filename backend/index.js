@@ -5,12 +5,11 @@ const mongoose = require('mongoose');
 const authRoute = require('./routes/authRoute');
 const userController = require('./controllers/userController');
 const UserModel = require('./models/User');
-
-const pool=require("./config/db")
+const imageRoute = require('./routes/imageRoute');
+const ImageController = require('./controllers/ImageController');
 
 require("./mongo");
 const userRoute = require("./routes/userRoute");
-const userController = require('./controllers/userController');
 
 
 
@@ -35,47 +34,9 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-
-app.get("/", (req, res) => {
-  res.send("This is a GET request example");
-});
-
-app.get("/register", (req, res) => {
-  res.send("register");
-});
-
 app.post("/register", userController.registerUser);
 
 app.post("/login",async (req,res)=>{
-
-  // const email=req.body["email"]
-  // const password=req.body["password"]
-  // console.log("email:"+email);
-  // console.log("password:"+password);
-
-  // // const insertSTMT=`INSERT INTO accounts(email,password)VALUES('${email}','${password}')`
-   
-  // //  pool.query(insertSTMT,(response)=>{
-  // //   console.log("Data saved")
-  // //   console.log(response);
-  // //  })
-  // //  console.log(req.body);
-  // //  res.send("Response recieved"+req.body);
-
-  // // MongoDB에 데이터 저장
-  // const newUser = new UserModel({ email, password });
-  // newUser.save()
-  //   .then(response => {
-  //     console.log("Data saved");
-  //     console.log(response);
-  //     res.send("Response received" + req.body);
-  //   })
-  //   .catch(error => {
-  //     console.error("Error saving data:", error.message);
-  //     res.status(500).json({ message: 'Internal Server Error' });
-  //   });
-
-
   try {
     const email = req.body["email"];
     const password = req.body["password"];
@@ -115,6 +76,7 @@ app.use(express.urlencoded({ extended: false }));
 // Routes
 app.use('/auth', authRoute);
 app.use("/users", userRoute);
+app.use('/image', imageRoute);
 
 // Register route handler
 app.post("/register", userController.registerUser);

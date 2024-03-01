@@ -6,7 +6,7 @@ const authRoute = require('./routes/authRoute');
 const userController = require('./controllers/userController');
 const UserModel = require('./models/User');
 const imageRoute = require('./routes/imageRoute');
-const ImageController = require('./controllers/ImageController');
+
 
 require("./mongo");
 const userRoute = require("./routes/userRoute");

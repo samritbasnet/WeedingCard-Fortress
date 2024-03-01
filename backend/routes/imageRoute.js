@@ -1,10 +1,23 @@
-// imageRoute.js
+// routes/imageRoutes.js
 
 const express = require('express');
-const router = express.Router();
-const ImageController = require('../controllers/ImageController');
+const { generateImage } = require('./controllers/imageController');
 
-// Route for generating images
-router.post('/generateImage', ImageController.generateImage);
+const router = express.Router();
+
+router.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+router.post('/generateImage', async (req, res) => {
+    try {
+        const { prompt, width, height } = req.body;
+        const imageUrls = await generateImage(prompt, width, height);
+        res.json({ imageUrls });
+    } catch (error) {
+        console.error('Route Error:', error.message);
+        res.status(500).json({ error: 'Error generating image' });
+    }
+});
 
 module.exports = router;

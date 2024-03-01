@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-const Home = () => {
+const Home2 = () => {
+  const [prompt, setPrompt] = useState('');
+  const [width, setWidth] = useState('');
+  const [height, setHeight] = useState('');
   const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleGenerateImages = async () => {
-    const prompt = document.getElementById('prompt').value;
-    const width = document.getElementById('width').value;
-    const height = document.getElementById('height').value;
-
     setLoading(true);
+    setError(null);
 
     try {
-      // Make a POST request to your server's /generateImage endpoint
-      const response = await fetch('/generateImage', {
+      const response = await fetch('http://localhost:5000/generateImage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,20 +23,22 @@ const Home = () => {
         body: JSON.stringify({ prompt, width, height }),
       });
 
-      // Parse the response JSON
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Error generating image. Status: ${response.status}`);
+      }
 
-      // Set the generated image URLs
+      const data = await response.json();
       setImageUrls(data.imageUrls);
     } catch (error) {
-      console.error('Error generating image:', error);
+      console.error('Error generating image:', error.message);
+      setError('Error generating image. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="lg" style={{ marginTop: 50, marginBottom: 100, backgroundColor: '#ffffff' }}>
+    <Container maxWidth="lg" className="main-container">
       <Typography variant="h4" align="center" gutterBottom>
         AI Image Generation
       </Typography>
@@ -44,12 +46,13 @@ const Home = () => {
         Enter your prompt to generate images:
       </Typography>
       <TextField
-        id="prompt"
         label="Prompt"
         variant="outlined"
         fullWidth
         margin="normal"
         placeholder="Enter your prompt here..."
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
         InputProps={{
           style: { color: '#29272D' },
           startAdornment: (
@@ -59,33 +62,47 @@ const Home = () => {
           ),
         }}
       />
-      <TextField id="width" label="Width" variant="outlined" fullWidth margin="normal" />
-      <TextField id="height" label="Height" variant="outlined" fullWidth margin="normal" />
+      <TextField
+        label="Width"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={width}
+        onChange={(e) => setWidth(e.target.value)}
+      />
+      <TextField
+        label="Height"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={height}
+        onChange={(e) => setHeight(e.target.value)}
+      />
       <Button
         variant="contained"
         color="secondary"
         size="small"
-        style={{ marginTop: 10, width: '150px', backgroundColor: '#87AEDC', color: '#ffffff' }}
+        className="generate-button"
         onClick={handleGenerateImages}
         disabled={loading}
       >
         {loading ? 'Generating...' : 'Generate Images'}
       </Button>
-      {/* Display generated images */}
+      {error && <div className="error-message">{error}</div>}
       {imageUrls.length > 0 && (
-        <div style={{ marginTop: 30 }}>
+        <div className="generated-images">
           <Typography variant="h6" align="center" gutterBottom>
             Generated Images
           </Typography>
-          <Grid container spacing={2} style={{ marginTop: 10 }}>
+          <Grid container spacing={2} className="images-grid">
             {imageUrls.map((imageUrl, index) => (
               <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card style={{ transition: 'transform 0.3s ease', '&:hover': { transform: 'scale(1.05)' }, height: '300px' }}>
+                <Card className="image-card">
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
                       Generated Image {index + 1}
                     </Typography>
-                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} style={{ width: '100%', borderRadius: 8 }} />
+                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
                   </CardContent>
                 </Card>
               </Grid>
@@ -97,4 +114,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home2;

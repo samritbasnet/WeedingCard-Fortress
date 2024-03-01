@@ -7,6 +7,7 @@ import Landing from '../pages/landing/landing';
 import Login from '../pages/login/login';
 import Signup from '../pages/signup/signup';
 import Home from '../pages/home/home';
+import Home2 from '../pages/home/home2';
 import Footer from '../components/footer/footer';
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} /> 
-        <Route path= "/home" element={<Home/>}/>
+        <Route path= "/home" element={<Home />}/>
+        <Route path= "/home2" element={<Home2 />}/>
       </Routes>
       <Footer/>
       <Toaster

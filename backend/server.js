@@ -7,9 +7,8 @@ const userController = require('./controllers/userController');
 const UserModel = require('./models/User');
 const imageRoute = require('./routes/imageRoute');
 
-
-require("./mongo");
 const userRoute = require("./routes/userRoute");
+const imageController = require('./controllers/ImageController');
 
 
 
@@ -28,13 +27,12 @@ mongoose.connect('mongodb://localhost:27017/WeddingCard')
     .then(function () { console.log('connected successfully') })
     .catch(function (err) { console.log('DB was not connected' + err) }); 
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// db.once('open', () => {
+//   console.log('Connected to MongoDB');
+// });
 
-app.post("/register", userController.registerUser);
 
 app.post("/login",async (req,res)=>{
   try {
@@ -83,6 +81,10 @@ app.post("/register", userController.registerUser);
 
 // Login route handler
 app.post("/login", userController.loginUser);
+
+app.post('/generateImage', imageController.generateImage);
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

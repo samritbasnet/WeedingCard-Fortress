@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Container, TextField, Typography, Grid } from "@mui/material";
 import { AccountCircle,  Google } from "@mui/icons-material";
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -30,6 +31,9 @@ const Login = () => {
         password
       });
       console.log(response.data); // Handle successful login
+      toast.success("Successfully login!");
+      localStorage.setItem("token", response.data?.token);
+      window.location.href = "/home";
     } catch (error) {
       console.error(error.response.data.message); // Handle login error
     }

@@ -33,7 +33,7 @@ const Login = () => {
       console.log(response.data); // Handle successful login
       toast.success("Successfully login!");
       localStorage.setItem("token", response.data?.token);
-      window.location.href = "/home";
+      window.location.href = "/home2";
     } catch (error) {
       console.error(error.response.data.message); // Handle login error
     }

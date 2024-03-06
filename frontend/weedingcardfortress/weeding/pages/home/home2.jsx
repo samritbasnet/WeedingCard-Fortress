@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Rating } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 
 const Home2 = () => {
   const [prompt, setPrompt] = useState('');
-  const [width, setWidth] = useState('');
-  const [height, setHeight] = useState('');
+  const [Nprompt, setNprompt] = useState('');
   const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -14,6 +13,11 @@ const Home2 = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    // Set the initial value of Nprompt when the component mounts
+    setNprompt("ugly, deformed, noisy, blurry, distorted, out of focus, bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers");
+  }, []);
 
   const handleGenerateImages = async () => {
     setLoading(true);
@@ -25,7 +29,7 @@ const Home2 = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt, width, height }),
+        body: JSON.stringify({ prompt, Nprompt }),
       });
 
       if (!response.ok) {
@@ -74,6 +78,27 @@ const Home2 = () => {
           ),
         }}
       />
+
+      <TextField
+        label="Negative Prompt"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        placeholder="Enter your negative prompt here..."
+        value={Nprompt}
+        onChange={(e) => setNprompt(e.target.value)}
+        InputProps={{
+          readOnly: true,
+          style: { color: '#29272D', display: 'none' },
+          startAdornment: (
+            <IconButton>
+              <SearchIcon />
+            </IconButton>
+          ),
+        }}
+        InputLabelProps={{ style: { display: 'none' } }}
+      />
+
       <Button
         variant="contained"
         color="secondary"

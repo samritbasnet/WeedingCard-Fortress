@@ -60,8 +60,6 @@ const generateImage = async (req, res) => {
         res.status(500).send('Error generating image');
     }
 
-    console.log(width);
-    console.log(height);
   };
 
 

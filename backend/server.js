@@ -7,9 +7,11 @@ const userController = require('./controllers/userController');
 const UserModel = require('./models/User');
 const imageRoute = require('./routes/imageRoute');
 
+
 const userRoute = require("./routes/userRoute");
 const imageController = require('./controllers/ImageController');
-
+const Review = require('./models/Review');
+const { authMiddleware, generateToken, verifyToken } = require('./middleware/authMiddleware');
 
 
 
@@ -40,7 +42,7 @@ app.post("/login",async (req,res)=>{
     const password = req.body["password"];
     console.log("email:" + email);
     console.log("password:" + password);
-
+    
   
     const user = await UserModel.findOne({ email });
 
@@ -57,8 +59,10 @@ app.post("/login",async (req,res)=>{
       return res.status(401).json({ message: 'Invalid password' });
     }
 
+    const token = generateToken(user._id);
+    console.log("token:" + token);
 
-    res.status(200).json({ message: 'Login successful' });
+    res.status(200).json({ message: 'Login successful', token});
     console.log('Login successful');
   } catch (error) {
     console.error("Error during login:", error.message);
@@ -66,7 +70,26 @@ app.post("/login",async (req,res)=>{
   }
 });
 
+app.post('/submitReview', authMiddleware, async (req, res) => {
+  
+  
+  try {
+    const { rating, review } = req.body;
 
+
+    const userId = req.user.id;
+    // Create a new review instance with the found user's _id
+    const newReview = new Review({ user: userId, rating, review });
+
+    // Save the review to the database
+    await newReview.save();
+
+    res.status(201).json({ message: 'Review submitted successfully' });
+  } catch (error) {
+    console.error('Error submitting review:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 app.use(express.urlencoded({ extended: false }));
 

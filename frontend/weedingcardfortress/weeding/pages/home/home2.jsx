@@ -9,12 +9,13 @@ const Home2 = () => {
   const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
+
     // Set the initial value of Nprompt when the component mounts
     setNprompt("ugly, deformed, noisy, blurry, distorted, out of focus, bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers");
   }, []);
@@ -35,7 +36,6 @@ const Home2 = () => {
       if (!response.ok) {
         throw new Error(`Error generating image. Status: ${response.status}`);
       }
-
       const data = await response.json();
       setImageUrls(data.imageUrls);
     } catch (error) {
@@ -46,15 +46,42 @@ const Home2 = () => {
     }
   };
 
-  const handleReviewSubmit = () => {
-    const newReview = { rating, review };
-    setReviews([...reviews, newReview]);
-    setRating(0);
-    setReview('');
+  const handleReviewSubmit = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch('http://localhost:3001/submitReview', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`,
+        },
+        body: JSON.stringify({ rating, review }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error submitting review. Status: ${response.status}`);
+      }
+
+      // Handle success, clear form or update UI as needed
+      console.log('Review submitted successfully');
+      // You might want to clear the form or update the UI here
+
+    } catch (error) {
+      console.error('Error submitting review:', error.message);
+      // Handle error, display a message to the user, etc.
+      // You might want to show an error message to the user
+
+    } finally {
+      // Any cleanup or additional logic that needs to run regardless of success or failure can go here
+      // For example, you might want to hide a loading spinner
+      setRating(0);
+      setReview('');
+    }
   };
 
   return (
     <Container maxWidth="lg" className="main-container">
+      {/* Hidden input for user's email */}
       <Typography variant="h4" align="center" gutterBottom>
         AI Image Generation
       </Typography>

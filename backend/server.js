@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
@@ -11,9 +12,8 @@ const userRoute = require("./routes/userRoute");
 const imageController = require('./controllers/ImageController');
 
 
+const a=10;
 
-
-const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware

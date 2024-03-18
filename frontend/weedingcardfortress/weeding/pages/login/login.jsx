@@ -241,7 +241,7 @@ const Login = () => {
     try {
       const result = await firebase.auth().signInWithPopup(provider);
       console.log("User signed in:", result.user);
-      window.location.href = "/home"; // Redirect after successful Google sign-in
+      window.location.href = "/home2"; // Redirect after successful Google sign-in
     } catch (error) {
       console.error("Google sign-in error:", error);
       toast.error("Failed to sign in with Google");

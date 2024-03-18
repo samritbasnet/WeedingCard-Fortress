@@ -25,7 +25,7 @@ const Navbar = () => {
 
   // Render logout button only on the home screen
   const renderLogoutButton = () => {
-    if (location.pathname === '/home') {
+    if (location.pathname === '/home2' || location.pathname === '/home') {
       return (
         <Button color="inherit" onClick={handleMenuOpen}>Logout</Button>
       );

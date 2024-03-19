@@ -2,20 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Rating } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-
 const Home2 = () => {
   const [prompt, setPrompt] = useState('');
   const [Nprompt, setNprompt] = useState('');
   const [imageUrls, setImageUrls] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-
     // Set the initial value of Nprompt when the component mounts
     setNprompt("ugly, deformed, noisy, blurry, distorted, out of focus, bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers");
   }, []);
@@ -62,26 +59,23 @@ const Home2 = () => {
         throw new Error(`Error submitting review. Status: ${response.status}`);
       }
 
-      // Handle success, clear form or update UI as needed
       console.log('Review submitted successfully');
-      // You might want to clear the form or update the UI here
-
     } catch (error) {
       console.error('Error submitting review:', error.message);
-      // Handle error, display a message to the user, etc.
-      // You might want to show an error message to the user
-
     } finally {
-      // Any cleanup or additional logic that needs to run regardless of success or failure can go here
-      // For example, you might want to hide a loading spinner
       setRating(0);
       setReview('');
     }
   };
 
+  const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
+
+  const handleImageClick = () => {
+    window.location.href = paymentLink;
+  };
+
   return (
     <Container maxWidth="lg" className="main-container">
-      {/* Hidden input for user's email */}
       <Typography variant="h4" align="center" gutterBottom>
         AI Image Generation
       </Typography>
@@ -145,7 +139,7 @@ const Home2 = () => {
           <Grid container spacing={2} className="images-grid">
             {imageUrls.map((imageUrl, index) => (
               <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card className="image-card">
+                <Card className="image-card" onClick={handleImageClick}>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
                       Generated Image {index + 1}
@@ -156,44 +150,39 @@ const Home2 = () => {
               </Grid>
             ))}
           </Grid>
-          {/* User rating and review section */}
-<Container maxWidth="md" style={{ marginTop: 30 }}>
-        <Typography variant="h6" gutterBottom>
-          Rate and Review
-        </Typography>
-        {/* Rating input */}
-        <Rating
-          name="rating"
-          value={rating}
-          onChange={(event, newValue) => {
-            setRating(newValue);
-          }}
-        />
-        {/* Review input */}
-        <TextField
-          id="review"
-          label="Review"
-          variant="outlined"
-          fullWidth
-          multiline
-          rows={4}
-          margin="normal"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-        />
-        {/* Button to submit review */}
-        <Button variant="contained" color="primary" onClick={handleReviewSubmit}>
-          Submit
-        </Button>
-        {/* Display submitted reviews */}
-        {reviews.map((r, index) => (
-          <div key={index}>
-            <Typography variant="subtitle1" gutterBottom>
-              Rating: {r.rating} | Review: {r.review}
+          <Container maxWidth="md" style={{ marginTop: 30 }}>
+            <Typography variant="h6" gutterBottom>
+              Rate and Review
             </Typography>
-          </div>
-        ))}
-      </Container>
+            <Rating
+              name="rating"
+              value={rating}
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+            />
+            <TextField
+              id="review"
+              label="Review"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              margin="normal"
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+            />
+            <Button variant="contained" color="primary" onClick={handleReviewSubmit}>
+              Submit
+            </Button>
+            {reviews.map((r, index) => (
+              <div key={index}>
+                <Typography variant="subtitle1" gutterBottom>
+                  Rating: {r.rating} | Review: {r.review}
+                </Typography>
+              </div>
+            ))}
+          </Container>
         </div>
       )}
     </Container>

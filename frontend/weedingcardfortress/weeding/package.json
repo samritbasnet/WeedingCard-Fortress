@@ -15,7 +15,7 @@
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
     "@stripe/react-stripe-js": "^2.5.1",
-    "@stripe/stripe-js": "^3.0.7",
+    "@stripe/stripe-js": "^3.0.10",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
     "firebase": "^10.9.0",

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Rating } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom for navigation
 
 const Home2 = () => {
   const [prompt, setPrompt] = useState('');
@@ -11,6 +12,7 @@ const Home2 = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
+  const [paymentStatus, setPaymentStatus] = useState(false);
 
   useEffect(() => {
     // Set the initial value of Nprompt when the component mounts
@@ -44,6 +46,10 @@ const Home2 = () => {
   };
 
   const handleReviewSubmit = async () => {
+    const newReview = { rating, review };
+    setReviews([...reviews, newReview]);
+    setRating(0);
+    setReview('');
     try {
       const token = localStorage.getItem("token");
       const response = await fetch('http://localhost:3001/submitReview', {
@@ -71,15 +77,25 @@ const Home2 = () => {
   const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
 
   const handleImageClick = () => {
-    window.location.href = paymentLink;
+    if (paymentStatus) {
+      // Trigger download action here
+      console.log('Downloading image...');
+    } else {
+      window.location.href = paymentLink;
+    }
+  };
+
+  // Mock function to simulate successful payment
+  const simulateSuccessfulPayment = () => {
+    setPaymentStatus(true);
   };
 
   return (
     <Container maxWidth="lg" className="main-container">
-      <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h4" align="center" gutterBottom style={{ marginTop: '2rem' }}>
         AI Image Generation
       </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#000' }}>
+      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#444', marginBottom: '2rem' }}>
         Enter your prompt to generate images:
       </Typography>
       <TextField
@@ -91,7 +107,7 @@ const Home2 = () => {
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         InputProps={{
-          style: { color: '#29272D' },
+          style: { color: '#333' },
           startAdornment: (
             <IconButton>
               <SearchIcon />
@@ -110,7 +126,7 @@ const Home2 = () => {
         onChange={(e) => setNprompt(e.target.value)}
         InputProps={{
           readOnly: true,
-          style: { color: '#29272D', display: 'none' },
+          style: { color: '#333', display: 'none' },
           startAdornment: (
             <IconButton>
               <SearchIcon />
@@ -122,9 +138,9 @@ const Home2 = () => {
 
       <Button
         variant="contained"
-        color="secondary"
-        size="small"
-        className="generate-button"
+        color="primary"
+        size="large"
+        style={{ marginTop: '2rem', marginBottom: '1rem' }}
         onClick={handleGenerateImages}
         disabled={loading}
       >
@@ -133,25 +149,25 @@ const Home2 = () => {
       {error && <div className="error-message">{error}</div>}
       {imageUrls.length > 0 && (
         <div className="generated-images">
-          <Typography variant="h6" align="center" gutterBottom>
+          <Typography variant="h6" align="center" gutterBottom style={{ marginTop: '2rem', marginBottom: '1rem' }}>
             Generated Images
           </Typography>
           <Grid container spacing={2} className="images-grid">
             {imageUrls.map((imageUrl, index) => (
               <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card className="image-card" onClick={handleImageClick}>
+                <Card className="image-card" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
                   <CardContent>
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" gutterBottom style={{ color: '#333' }}>
                       Generated Image {index + 1}
                     </Typography>
-                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
+                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" style={{ maxWidth: '100%' }} />
                   </CardContent>
                 </Card>
               </Grid>
             ))}
           </Grid>
-          <Container maxWidth="md" style={{ marginTop: 30 }}>
-            <Typography variant="h6" gutterBottom>
+          <Container maxWidth="md" style={{ marginTop: '2rem' }}>
+            <Typography variant="h6" gutterBottom style={{ color: '#333', marginBottom: '1rem' }}>
               Rate and Review
             </Typography>
             <Rating
@@ -172,17 +188,36 @@ const Home2 = () => {
               value={review}
               onChange={(e) => setReview(e.target.value)}
             />
-            <Button variant="contained" color="primary" onClick={handleReviewSubmit}>
+            <Button variant="contained" color="primary" style={{ marginTop: '1rem' }} onClick={handleReviewSubmit}>
               Submit
             </Button>
             {reviews.map((r, index) => (
-              <div key={index}>
-                <Typography variant="subtitle1" gutterBottom>
+              <div key={index} style={{ marginTop: '1rem' }}>
+                <Typography variant="subtitle1" gutterBottom style={{ color: '#333' }}>
                   Rating: {r.rating} | Review: {r.review}
                 </Typography>
               </div>
             ))}
           </Container>
+          {paymentStatus && (
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ marginTop: '2rem' }}
+              onClick={handleDownload}
+            >
+              Download Images
+            </Button>
+          )}
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              style={{ marginTop: '1rem' }}
+            >
+              Back to Home
+            </Button>
+          </Link>
         </div>
       )}
     </Container>

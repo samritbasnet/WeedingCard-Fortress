@@ -14,6 +14,8 @@
     const [review, setReview] = useState('');
     const [reviews, setReviews] = useState([]);
 
+    const [paymentStatus, setPaymentStatus] = useState(false);
+
     const handleDownload = async (imageUrl) => {
       try {
         const a = document.createElement('a');
@@ -92,6 +94,13 @@
       }
     };
 
+    const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
+
+    const handleImageClick = () => {
+      window.open(paymentLink, '_blank');
+    };
+  
+
     return (
       <Container maxWidth="lg" className="main-container">
         {/* Hidden input for user's email */}
@@ -158,7 +167,7 @@
             <Grid container spacing={2} className="images-grid">
               {imageUrls.map((imageUrl, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
-                  <Card className="image-card">
+                  <Card className="image-card" onClick={handleImageClick}>
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
                         Generated Image {index + 1}

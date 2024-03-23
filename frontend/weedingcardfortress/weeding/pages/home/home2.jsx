@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, TextField, Button, Grid, Card, CardContent, IconButton, Rating } from '@mui/material';
+import { 
+  Container, 
+  Typography, 
+  TextField, 
+  Button, 
+  Grid, 
+  Card, 
+  CardContent, 
+  IconButton, 
+  Rating 
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 const Home2 = () => {
   const [prompt, setPrompt] = useState('');
@@ -98,12 +111,22 @@ const Home2 = () => {
     window.open(paymentLink, '_blank');
   };
 
+  const shareToFacebook = (imageUrl) => {
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}`;
+    window.open(shareUrl, '_blank');
+  };
+  
+
+  const shareToTwitter = (imageUrl) => {
+    const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}`;
+    window.open(shareUrl, '_blank');
+  };
   return (
-    <Container maxWidth="lg" className="main-container">
+    <Container maxWidth="lg" className="main-container" style={{ marginTop: 50, marginBottom: 100, backgroundColor: '#ffffff' }}>
       <Typography variant="h4" align="center" gutterBottom>
         AI Image Generation
       </Typography>
-      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#000' }}>
+      <Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#fff' }}>
         Enter your prompt to generate images:
       </Typography>
       <TextField
@@ -161,22 +184,32 @@ const Home2 = () => {
             Generated Images
           </Typography>
           <Grid container spacing={2} className="images-grid">
-            {imageUrls.map((imageUrl, index) => (
-              <Grid item key={index} xs={12} sm={6} md={4}>
-                <Card className="image-card" onClick={handleImageClick}>
-                  <CardContent>
-                    <Typography variant="h6" gutterBottom>
-                      Generated Image {index + 1}
-                    </Typography>
-                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
-                    <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
-                      Download
-                    </Button>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+  {imageUrls.map((imageUrl, index) => (
+    <Grid item key={index} xs={12} sm={6} md={4}>
+      <Card className="image-card">
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Generated Image {index + 1}
+          </Typography>
+          <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
+          <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
+            Download
+          </Button>
+          <div style={{ marginTop: 10 }}>
+            <IconButton onClick={() => shareToFacebook(imageUrl)}>
+              <FacebookIcon />
+            </IconButton>
+
+            <IconButton onClick={() => shareToTwitter(imageUrl)}>
+              <TwitterIcon />
+            </IconButton>
+          </div>
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+
         </div>
       )}
       <Container maxWidth="md" style={{ marginTop: 30 }}>

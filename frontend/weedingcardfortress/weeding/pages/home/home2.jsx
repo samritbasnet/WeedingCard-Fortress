@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Typography, 
-  TextField, 
-  Button, 
-  Grid, 
-  Card, 
-  CardContent, 
-  IconButton, 
-  Rating 
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+  IconButton,
+  Rating
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FacebookIcon from '@mui/icons-material/Facebook';
-import InstagramIcon from '@mui/icons-material/Instagram';
 import TwitterIcon from '@mui/icons-material/Twitter';
 
 const Home2 = () => {
@@ -25,8 +24,6 @@ const Home2 = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
-
-  const [paymentStatus, setPaymentStatus] = useState(false);
 
   const handleDownload = async (imageUrl) => {
     try {
@@ -105,22 +102,16 @@ const Home2 = () => {
     }
   };
 
-  const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
-
-  const handleImageClick = () => {
-    window.open(paymentLink, '_blank');
-  };
-
   const shareToFacebook = (imageUrl) => {
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}`;
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&amp;quote=${encodeURIComponent('Check out this generated image!')}`;
     window.open(shareUrl, '_blank');
   };
-  
 
   const shareToTwitter = (imageUrl) => {
-    const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}`;
+    const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}&text=${encodeURIComponent('Check out this generated image!')}`;
     window.open(shareUrl, '_blank');
   };
+
   return (
     <Container maxWidth="lg" className="main-container" style={{ marginTop: 50, marginBottom: 100, backgroundColor: '#ffffff' }}>
       <Typography variant="h4" align="center" gutterBottom>
@@ -184,32 +175,31 @@ const Home2 = () => {
             Generated Images
           </Typography>
           <Grid container spacing={2} className="images-grid">
-  {imageUrls.map((imageUrl, index) => (
-    <Grid item key={index} xs={12} sm={6} md={4}>
-      <Card className="image-card">
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Generated Image {index + 1}
-          </Typography>
-          <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
-          <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
-            Download
-          </Button>
-          <div style={{ marginTop: 10 }}>
-            <IconButton onClick={() => shareToFacebook(imageUrl)}>
-              <FacebookIcon />
-            </IconButton>
+            {imageUrls.map((imageUrl, index) => (
+              <Grid item key={index} xs={12} sm={6} md={4}>
+                <Card className="image-card">
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Generated Image {index + 1}
+                    </Typography>
+                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
+                    <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
+                      Download
+                    </Button>
+                    <div style={{ marginTop: 10 }}>
+                      <IconButton onClick={() => shareToFacebook(imageUrl)}>
+                        <FacebookIcon />
+                      </IconButton>
 
-            <IconButton onClick={() => shareToTwitter(imageUrl)}>
-              <TwitterIcon />
-            </IconButton>
-          </div>
-        </CardContent>
-      </Card>
-    </Grid>
-  ))}
-</Grid>
-
+                      <IconButton onClick={() => shareToTwitter(imageUrl)}>
+                        <TwitterIcon />
+                      </IconButton>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </div>
       )}
       <Container maxWidth="md" style={{ marginTop: 30 }}>
@@ -222,7 +212,8 @@ const Home2 = () => {
           onChange={(event, newValue) => {
             setRating(newValue);
           }}
-        />
+       
+/>
         <TextField
           id="review"
           label="Review"

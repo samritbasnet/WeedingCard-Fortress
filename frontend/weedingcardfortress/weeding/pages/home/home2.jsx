@@ -25,6 +25,8 @@ const Home2 = () => {
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
 
+  const [paymentStatus, setPaymentStatus] = useState(false);
+
   const handleDownload = async (imageUrl) => {
     try {
       const a = document.createElement('a');
@@ -69,6 +71,11 @@ const Home2 = () => {
     }
   };
 
+  const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
+
+  const handleImageClick = () => {
+    window.open(paymentLink, '_blank');
+  };
   const handleReviewSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -182,7 +189,7 @@ const Home2 = () => {
                     <Typography variant="h6" gutterBottom>
                       Generated Image {index + 1}
                     </Typography>
-                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
+                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" onClick={handleImageClick} />
                     <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
                       Download
                     </Button>

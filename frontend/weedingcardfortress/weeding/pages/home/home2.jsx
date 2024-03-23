@@ -71,12 +71,34 @@ const Home2 = () => {
     }
   };
 
-  const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
+  // const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
 
-  const handleImageClick = () => {
-    window.open(paymentLink, '_blank');
+  const handleImageClick = async (image) => {
+    // window.open(paymentLink, '_blank');
+    const response = await fetch('http://localhost:3001/payments/checkout-session/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        
+      },
+      body: JSON.stringify({ image}),
+    });
+
+    if (!response.ok) 
+    {
+      
+      throw new Error(`Error submitting review. Status: ${response.status}`);
+    }
+    const jsonresponse=await response.json();
+    window.open(jsonresponse.url);
+
+    // Handle success, clear form or update UI as needed
+    console.log('Review submitted successfully');
+    // You might want to clear the form or update the UI here
+
   };
   const handleReviewSubmit = async () => {
+    
     try {
       const token = localStorage.getItem("token");
       const response = await fetch('http://localhost:3001/submitReview', {
@@ -189,10 +211,10 @@ const Home2 = () => {
                     <Typography variant="h6" gutterBottom>
                       Generated Image {index + 1}
                     </Typography>
-                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" onClick={handleImageClick} />
-                    <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
+                    <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" onClick={()=>handleImageClick(imageUrl)} />
+                    {/* <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
                       Download
-                    </Button>
+                    </Button> */}
                     <div style={{ marginTop: 10 }}>
                       <IconButton onClick={() => shareToFacebook(imageUrl)}>
                         <FacebookIcon />

@@ -10,6 +10,7 @@ const userRoute = require("./routes/userRoute");
 const imageController = require('./controllers/ImageController');
 const Review = require('./models/Review');
 const { authMiddleware, generateToken } = require('./middleware/authMiddleware');
+const paymentRoute =require("./routes/paymentRoute");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -46,6 +47,7 @@ app.post('/submitReview', authMiddleware, async (req, res) => {
 
 // Other routes
 app.use(express.urlencoded({ extended: false }));
+app.use('/payments',paymentRoute)
 app.use('/auth', authRoute);
 app.use('/users', userRoute);
 app.use('/image', imageRoute);

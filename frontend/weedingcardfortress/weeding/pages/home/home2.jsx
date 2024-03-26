@@ -14,6 +14,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 
+
 const Home2 = () => {
   const [prompt, setPrompt] = useState('');
   const [Nprompt, setNprompt] = useState('');
@@ -25,11 +26,12 @@ const Home2 = () => {
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState([]);
 
-  const [paymentStatus, setPaymentStatus] = useState(false);
+  const [payments, setpayment] = useState(false);
+  const [imagePayments, setImagePayments] = useState({});
 
   const handleDownload = async (imageUrl) => {
     try {
-        if (!isPaymentCompleted) {
+        if (!imagePayments[imageUrl]) {
           console.error('Payment is not completed yet.');
           return;
         }
@@ -43,6 +45,7 @@ const Home2 = () => {
       console.error('Error downloading image:', error.message);
     }
   };
+
 
   useEffect(() => {
     // Set the initial value of Nprompt when the component mounts
@@ -67,6 +70,7 @@ const Home2 = () => {
       }
       const data = await response.json();
       setImageUrls(data.imageUrls);
+
     } catch (error) {
       console.error('Error generating image:', error.message);
       setError('Error generating image. Please try again.');
@@ -76,29 +80,60 @@ const Home2 = () => {
   };
 
   const handleImageClick = async (image) => {
-    
     const response = await fetch('http://localhost:3001/payments/checkout-session/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         
       },
-      body: JSON.stringify({ image}),
+      body: JSON.stringify({image}),
     });
 
     if (!response.ok) 
     {
-      
       throw new Error(`Error submitting review. Status: ${response.status}`);
     }
-    const jsonresponse=await response.json();
+
+    const jsonresponse = await response.json();
+    const sessionId = jsonresponse.id;
+
+    if (!sessionId) {
+            throw new Error('Session ID is undefined');
+        }
+
     window.open(jsonresponse.url);
-
-    // Handle success, clear form or update UI as needed
-    console.log('Review submitted successfully');
-    // You might want to clear the form or update the UI here
-
   };
+
+  const updateImagePaymentStatus = (imageUrl) => {
+    // 이미지 결제 상태 업데이트
+    setImagePayments(prevState => ({
+      ...prevState,
+      [imageUrl]: true // 결제가 완료되었으므로 true로 설정
+    }));
+  };
+
+  const checkPaymentStatus = async (sessionId) => {
+    try {
+        const sessionCheckResponse = await fetch('http://localhost:3001/payments/check-payment-status/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ sessionId }),
+        });
+
+        if (!sessionCheckResponse.ok) {
+            throw new Error(`Error checking payment status. Status: ${sessionCheckResponse.status}`);
+        }
+
+        const paymentStatus = await sessionCheckResponse.json();
+        return paymentStatus;
+    } catch (error) {
+        console.error('Error processing payment:', error.message);
+        throw error;
+    }
+};
+
   const handleReviewSubmit = async () => {
     
     try {
@@ -133,6 +168,12 @@ const Home2 = () => {
     }
   };
 
+  const handleExamplePromptCopy = (examplePrompt) => {
+    navigator.clipboard.writeText(examplePrompt)
+      .then(() => alert(`Copied: ${examplePrompt}`))
+      .catch(err => console.error('Failed to copy: ', err));
+  };
+
   const shareToFacebook = (imageUrl) => {
     const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(imageUrl)}&amp;quote=${encodeURIComponent('Check out this generated image!')}`;
     window.open(shareUrl, '_blank');
@@ -142,6 +183,7 @@ const Home2 = () => {
     const shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(imageUrl)}&text=${encodeURIComponent('Check out this generated image!')}`;
     window.open(shareUrl, '_blank');
   };
+
 
   return (
     <Container maxWidth="lg" className="main-container" style={{ marginTop: 50, marginBottom: 100, backgroundColor: '#ffffff' }}>
@@ -235,7 +277,7 @@ const Home2 = () => {
                         Generated Image {index + 1}
                       </Typography>
                       <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" onClick={() => handleImageClick(imageUrl)} />
-                      <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
+                      <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)} disabled={!imagePayments[imageUrl]}>
                         Download
                       </Button>
                       <div style={{ marginTop: 10 }}>

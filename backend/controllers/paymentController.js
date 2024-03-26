@@ -18,11 +18,27 @@ exports.createStripeCheckout= async (req,res)=>{
             quantity:1
         }],
         mode:"payment",
-        success_url:image,
-        cancel_url:'http://http://localhost:5181/home2'
-
-
-
+        success_url: image,
+        cancel_url:'http://localhost:5173/home2'
     });
     return res.send(session);
+}
+
+exports.checkPaymentStatus = async (req, res) => {
+    const sessionId = req.body.sessionId;
+
+    try {
+        const session = await stripeClient.checkout.sessions.retrieve(sessionId);
+        if (session.payment_status === 'paid') {
+           
+            console.log("success")
+            return res.send({ status: 'success' });
+        } else {
+            console.log("pending")
+            return res.send({ status: 'pending' });
+        }
+    } catch (error) {
+        console.error('Error checking payment status:', error.message);
+        return res.status(500).send({ error: 'Internal Server Error' });
+    }
 }

@@ -42,7 +42,7 @@ async function t2i(prompt, negativePrompt, imageformat, returntype, width, heigh
 
 const generateImage = async (req, res) => {
     const prompt = req.body.prompt;
-    const negativePrompt = "paper, cake, low quality, low contrast, draft, amateur, cut off, cropped, frame, object out of frame, out of frame, body out of frame, text, letter, signature, watermark, blood";
+    const negativePrompt = "paper, cake, low quality, low contrast, draft, amateur, cut off, cropped, frame, object out of frame, out of frame, body out of frame, text, letter, signature, watermark, blood,ugly, deformed, noisy, blurry, distorted, out of focus, bad anatomy, extra limbs, poorly drawn face, poorly drawn hands, missing fingers";
     const imageformat = "png";
     const returntype = "url";
     const imageQuality = 80;

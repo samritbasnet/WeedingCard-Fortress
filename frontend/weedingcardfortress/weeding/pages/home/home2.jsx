@@ -14,10 +14,14 @@
     const [review, setReview] = useState('');
     const [reviews, setReviews] = useState([]);
 
-    const [paymentStatus, setPaymentStatus] = useState(false);
+    const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
 
     const handleDownload = async (imageUrl) => {
       try {
+        if (!isPaymentCompleted) {
+          console.error('Payment is not completed yet.');
+          return;
+        }
         const a = document.createElement('a');
         a.href = imageUrl;
         a.download = `image_${Date.now()}.jpg`;
@@ -93,13 +97,20 @@
         setReview('');
       }
     };
-
+    
     const paymentLink = 'https://buy.stripe.com/test_cN25ojggygjabn2eUU';
 
-    const handleImageClick = () => {
-      window.open(paymentLink, '_blank');
+    const handleImageClick = (imageUrl) => {
+      const paymentLinkWithParams = `${paymentLink}?imageUrl=${encodeURIComponent(imageUrl)}`;
+      window.open(paymentLinkWithParams, '_blank');
     };
   
+
+    const handleExamplePromptCopy = (examplePrompt) => {
+      navigator.clipboard.writeText(examplePrompt)
+        .then(() => alert(`Copied: ${examplePrompt}`))
+        .catch(err => console.error('Failed to copy: ', err));
+    };
 
     return (
       <Container maxWidth="lg" className="main-container">
@@ -148,6 +159,27 @@
           InputLabelProps={{ style: { display: 'none' } }}
         />
 
+<Typography variant="subtitle1" align="center" gutterBottom style={{ color: '#000' }}>
+    Example Prompts:
+  </Typography>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={4}>
+      <Typography variant="subtitle2" align="center" gutterBottom style={{ color: '#000', cursor: 'pointer', backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} onClick={() => handleExamplePromptCopy("Wedding invitation design in moss pink and ivory palette, watercolor style, expansive white central space for text, encircled by sharp focus intricate botanical details, highly detailed, vivid colors, ultra fine, watercolor paper texture, calligraphic font, botanical border, delicate shading, invitation card layout, soft edges, elegant, romantic, ultra-realistic.")}>
+        1. Wedding invitation design in moss pink and ivory palette, watercolor style, expansive white central space for text, encircled by sharp focus intricate botanical details, highly detailed, vivid colors, ultra fine, watercolor paper texture, calligraphic font, botanical border, delicate shading, invitation card layout, soft edges, elegant, romantic, ultra-realistic.
+      </Typography>
+    </Grid>
+    <Grid item xs={12} sm={4}>
+      <Typography variant="subtitle2" align="center" gutterBottom style={{ color: '#000', cursor: 'pointer', backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} onClick={() => handleExamplePromptCopy("minimalistic creative professional wedding invitation cards design,card in the center of the screen, frontal landscape horizontal view, minimalism, ultra hd, realistic, vivid colors, highly detailed, UHD drawing, pen and ink, perfect composition, beautiful detailed intricate insanely detailed octane render trending on artstation, 8k artistic photography, photorealistic concept art, soft natural volumetric cinematic perfect light")}>
+        2. minimalistic creative professional wedding invitation cards design,card in the center of the screen, frontal landscape horizontal view, minimalism, ultra hd, realistic, vivid colors, highly detailed, UHD drawing, pen and ink, perfect composition, beautiful detailed intricate insanely detailed octane render trending on artstation, 8k artistic photography, photorealistic concept art, soft natural volumetric cinematic perfect light
+      </Typography>
+    </Grid>
+    <Grid item xs={12} sm={4}>
+      <Typography variant="subtitle2" align="center" gutterBottom style={{ color: '#000', cursor: 'pointer', backgroundColor: '#f0f0f0', padding: '10px', borderRadius: '5px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} onClick={() => handleExamplePromptCopy("Wedding invitation design in moss blue and ivory palette, watercolor style, expansive white central space for text, encircled by sharp focus intricate botanical details, highly detailed, vivid colors, ultra fine, watercolor paper texture, calligraphic font, botanical border, delicate shading, invitation card layout, soft edges, elegant, romantic, ultra-realistic.")}>
+        3. Wedding invitation design in moss blue and ivory palette, watercolor style, expansive white central space for text, encircled by sharp focus intricate botanical details, highly detailed, vivid colors, ultra fine, watercolor paper texture, calligraphic font, botanical border, delicate shading, invitation card layout, soft edges, elegant, romantic, ultra-realistic.
+      </Typography>
+    </Grid>
+  </Grid>
+  <br></br>
         <Button
           variant="contained"
           color="secondary"
@@ -167,12 +199,12 @@
             <Grid container spacing={2} className="images-grid">
               {imageUrls.map((imageUrl, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
-                  <Card className="image-card" onClick={handleImageClick}>
+                  <Card className="image-card">
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
                         Generated Image {index + 1}
                       </Typography>
-                      <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" />
+                      <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" onClick={() => handleImageClick(imageUrl)} />
                       <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)}>
                         Download
                       </Button>

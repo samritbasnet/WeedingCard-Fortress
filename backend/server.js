@@ -10,6 +10,7 @@ const userRoute = require("./routes/userRoute");
 const imageController = require('./controllers/ImageController');
 const Review = require('./models/Review');
 const { authMiddleware, generateToken } = require('./middleware/authMiddleware');
+const paymentRoute =require("./routes/paymentRoute");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,9 +26,10 @@ mongoose.connect('mongodb://localhost:27017/WeddingCard', { useNewUrlParser: tru
 
 // Route to submit review
 app.post('/submitReview', authMiddleware, async (req, res) => {
+  console.log("test ");
   try {
     const { rating, review } = req.body;
-    const userId = req.user.id;
+    const userId = req.user.userId;
 
     // Create a new review instance with the user's _id
     const newReview = new Review({ user: userId, rating, review });
@@ -37,6 +39,7 @@ app.post('/submitReview', authMiddleware, async (req, res) => {
 
     res.status(201).json({ message: 'Review submitted successfully' });
   } catch (error) {
+
     console.error('Error submitting review:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
@@ -44,6 +47,7 @@ app.post('/submitReview', authMiddleware, async (req, res) => {
 
 // Other routes
 app.use(express.urlencoded({ extended: false }));
+app.use('/payments',paymentRoute)
 app.use('/auth', authRoute);
 app.use('/users', userRoute);
 app.use('/image', imageRoute);

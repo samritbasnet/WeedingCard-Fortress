@@ -85,12 +85,13 @@
       if (!sessionId) {
               throw new Error('Session ID is undefined');
           }
-
+      
+      //updateImagePaymentStatus(image);
       window.open(jsonresponse.url);
-      console.log(sessionId);
       checkPaymentStatus(sesstionId);
-      updateImagePaymentStatus(image);
     };
+
+    
 
     const updateImagePaymentStatus = (imageUrl) => {
     
@@ -314,9 +315,6 @@
                         </Typography>
                         <img src={imageUrl} alt={`Generated Image ${index + 1}`} className="image" style={{ width: '360px', height: '192px' }} onMouseMove={(e) => handleImageMouseMove(e)}
                           onMouseLeave={(e) => handleImageMouseLeave(e)} onClick={() => handleImageClick(imageUrl)} />
-                        <Button variant="outlined" color="primary" onClick={() => handleDownload(imageUrl)} disabled={!imagePayments[imageUrl]}>
-                          Download
-                        </Button>
                         <div style={{ marginTop: 10 }}>
                         <IconButton onClick={() => shareToFacebook(imageUrl)}>
                           <FacebookIcon />

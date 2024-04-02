@@ -68,7 +68,6 @@ class App extends React.Component {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={this.isAuthenticated() ? <Navigate to="/home2" /> : <Login />} />
           <Route path="/register" element={<Signup />} />
-          <Route path="/home" element={<Home />} />
           <Route
             path="/home2"
             element={this.isAuthenticated() ? <Home2 /> : <Navigate to="/login" />}

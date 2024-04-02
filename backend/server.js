@@ -9,7 +9,8 @@ const imageRoute = require('./routes/imageRoute');
 const userRoute = require("./routes/userRoute");
 const imageController = require('./controllers/ImageController');
 const Review = require('./models/Review');
-const { authMiddleware, generateToken } = require('./middleware/authMiddleware');
+const ReviewGoogle = require('./models/Reviewgoogle');
+const { authMiddleware, generateToken, getUserIdFromToken} = require('./middleware/authMiddleware');
 const paymentRoute =require("./routes/paymentRoute");
 
 const app = express();
@@ -43,6 +44,40 @@ app.post('/submitReview', authMiddleware, async (req, res) => {
     console.error('Error submitting review:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
+});
+
+// Route to submit review
+app.post('/submitReviewGoogle', async (req, res) => {
+  console.log("test ");
+  try {
+    const { rating, review } = req.body;
+
+    const token = req.headers.authorization;
+    console.log(token);
+    const userId = getUserIdFromToken(token);
+
+    // Create a new review instance with the user's _id
+    const newReview = new ReviewGoogle({ user: userId, rating, review });
+
+    // Save the review to the database
+    await newReview.save();
+
+    res.status(201).json({ message: 'ReviewGoogle submitted successfully' });
+  } catch (error) {
+
+    console.error('Error submitting reviewGoogle:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.post('/generate-token', (req, res) => {
+  const uid = req.body.uid; 
+
+  
+  const token = generateToken(uid);
+
+ 
+  res.json({ token });
 });
 
 // Other routes

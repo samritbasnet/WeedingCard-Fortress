@@ -228,6 +228,8 @@ const Login = () => {
       });
       console.log(response.data);
       toast.success("Successfully logged in!");
+      // Save IsLogin to localStorage
+      localStorage.setItem("IsLogin", true);
       localStorage.setItem("token", response.data?.token);
       window.location.href = "/home2"; // Redirect after successful login
     } catch (error) {
@@ -241,6 +243,17 @@ const Login = () => {
     try {
       const result = await firebase.auth().signInWithPopup(provider);
       console.log("User signed in:", result.user);
+      // Get the UID of the signed-in user
+      const uid = result.user.uid;
+      // Generate token using the UID
+      const response = await axios.post('http://localhost:3001/generate-token', { uid });
+      // Save the token to local storage
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      // Save IsGoogleLogin to localStorage
+      localStorage.setItem("IsGoogleLogin", true);
+      // Perform any action with the token (send it to backend, store it locally, etc.)
+      console.log("User token:", token);
       window.location.href = "/home2"; // Redirect after successful Google sign-in
     } catch (error) {
       console.error("Google sign-in error:", error);

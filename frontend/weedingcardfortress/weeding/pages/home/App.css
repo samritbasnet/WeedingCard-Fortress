@@ -1,0 +1,18 @@
+/* App.css */
+
+/* 이미지 기본 스타일 */
+img {
+    transition: transform 0.3s; /* 호버 시 부드럽게 확대되도록 트랜지션 적용 */
+  }
+  
+  /* 호버 상태일 때 이미지 확대 */
+  .hovered {
+    transform: scale(5); /* 5배 확대 */
+    position: relative; /* 부모 요소를 기준으로 위치 지정 */
+    z-index: 1; /* 다른 요소들보다 위에 위치하도록 함 */
+  }
+  
+  /* 호버 상태일 때 이미지의 위치 조정 */
+  .hovered:hover {
+    top: -150px; /* 커서의 위치에서 150px 위로 이동 */
+  }

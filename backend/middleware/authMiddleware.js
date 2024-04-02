@@ -35,4 +35,16 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = { authMiddleware, generateToken, verifyToken };
+const getUserIdFromToken = (token) => {
+  try {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    if (!decodedToken || !decodedToken.user || !decodedToken.user.id) {
+      throw new Error('Invalid token format');
+    }
+    return decodedToken.user.id;
+  } catch (error) {
+    throw error; // throw error directly instead of creating a new Error object
+  }
+};
+
+module.exports = { authMiddleware, generateToken, verifyToken, getUserIdFromToken };

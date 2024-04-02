@@ -19,6 +19,8 @@ const Navbar = () => {
     // Perform logout actions here, e.g., clearing session, redirecting to login page
     // After logout, close the dropdown menu
     localStorage.removeItem("token");
+    localStorage.removeItem("IsLogin");
+    localStorage.removeItem("IsGoogleLogin");
     handleMenuClose();
     // Example redirect to login page:
     window.location.href = "/login";

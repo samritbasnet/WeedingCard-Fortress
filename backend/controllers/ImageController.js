@@ -47,8 +47,9 @@ const generateImage = async (req, res) => {
     const returntype = "url";
     const imageQuality = 80;
     const samples = 6;
-    const width = 360;
-    const height = 192;
+    const width = 640;
+    const height = 640;
+
   
   
     const imageUrls = await t2i(prompt, negativePrompt, imageformat, returntype, width, height, imageQuality, samples);
